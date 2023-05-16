@@ -1,33 +1,32 @@
-use std::arch::aarch64::int32x2x4_t;
-use std::vec;
-use std::{collections::HashMap, str::Chars};
+use std::collections::HashMap;
 use shuffle::shuffler::Shuffler;
 use shuffle::irs::Irs;
 use rand::rngs::mock::StepRng;
 
 fn main() {
+    for i in (1..20) {
+      let mut  v  =  generate();
+      print( &mut v);
+      sortEmAll(&mut v);
+      print!(" -> ");
+      print( &mut v);
+      if testSortedVec(&mut v) {
+        print!(" [Passed]");
+      }
+      else {
+        print!(" [Failed]");
+      }
 
-    let mut scores = HashMap::new();
+      println!();
+     
 
-    scores.insert(String::from("Blue"), 10);
-    scores.insert(String::from("Yellow"), 50);
-    println!("Hello, world!");
-
-    let mut v  =  generate();
-
-    for c in v {
-      print!("{}", c);
     }
-    let mut vv : Vec<char> = v.clone();
-    dummyone( vv);
-
 }
-
 
 fn generate() -> Vec<char>  {
   let mut v : Vec<char> = Vec::new();
   let mut c : char  = 'A';
-  for  number in (1..10) { 
+  for  number in (1..24) { 
      v.push(c);
      v.push(c);
      c = (c as u8 + 1) as char; 
@@ -38,16 +37,41 @@ fn generate() -> Vec<char>  {
   return v;
 }
 
-fn dummyone(input: &mut Vec<char>)  {
-  let mut table : HashMap<char, i32> = HashMap::new();
-
-  let mut i = 0;
-  let mut c: char;
-  while i < input.len() {
-   // c = input.get(i).as_mut();
-    //print!("{}", c);
-    i += 1;
+fn print(input: &mut Vec<char>)  {
+  for c in input {
+    print!("{}", c);
   }
-
 }
 
+
+fn sortEmAll(input: &mut Vec<char>)  {
+  let mut table: HashMap<char, usize>= HashMap::new();
+  let mut idx: usize = 0;
+  while idx < input.len() {
+    let s = &input[idx];
+    let hv: Option<&usize> = table.get(s);
+    match hv {
+      Some(hv) => {
+        let sdx = if ((hv+1) % 2 == 0) {hv-1} else {hv+1};
+        input.swap(idx, sdx);
+        let s = &input[idx];
+        table.insert(s.clone(), idx);
+      },
+      None => { 
+        table.insert(s.clone(), idx);
+      },
+    }
+    idx += 1;
+  }
+}
+
+fn testSortedVec(input: &mut Vec<char>) -> bool {
+  let mut res = 2;
+  let mut p = input.get(0).copied().unwrap();
+  for c in input {
+     if c==&p {res -= 1} else { res += 1 }; 
+     p = c.clone();
+  }
+  return res == 0;
+
+}

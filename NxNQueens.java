@@ -21,12 +21,12 @@ public class NxNQueens {
 
         public Entry(int row, int col) {
             this.row = row;
-            this.col = col;
+            this.col = col; 
         }
     }
 
     public static void main(String[] args) {
-        new NxNQueens().solve();
+        new NxNQueens().solve(); d
     }
 
     public void solve() {
