@@ -20,7 +20,6 @@ fn main() {
       else {
         print!(" [Failed]");
       }
-
       println!();
     }
 }
